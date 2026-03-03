@@ -1,0 +1,207 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw data loaded from seed files into Snowflake. In production, this would be data from OMS, custodian feeds, and market data vendors."
+    database: IBOR_DB
+    schema: PUBLIC_RAW_DATA
+    
+    tables:
+      - name: securities_master
+        description: "Master data for all tradeable securities including stocks, bonds, and other instruments"
+        columns:
+          - name: security_id
+            description: "Unique identifier for the security"
+            tests:
+              - unique
+              - not_null
+          - name: isin
+            description: "International Securities Identification Number"
+          - name: cusip
+            description: "Committee on Uniform Securities Identification Procedures number"
+          - name: ticker
+            description: "Trading symbol for the security"
+          - name: security_name
+            description: "Full name of the security"
+          - name: asset_class
+            description: "Asset class classification (Equity, Fixed Income, etc.)"
+            tests:
+              - accepted_values:
+                  values: ['Equity', 'Fixed Income', 'Commodity', 'Currency', 'Derivative']
+          - name: currency
+            description: "Trading currency for the security"
+          - name: country
+            description: "Country of domicile"
+          - name: sector
+            description: "Industry sector classification"
+          - name: market_cap_category
+            description: "Market capitalization category"
+          - name: exchange
+            description: "Primary exchange where security trades"
+        
+        # Freshness check - warn if data is stale
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 7, period: day}
+      
+      - name: portfolios
+        description: "Portfolio master data containing portfolio configurations and metadata"
+        columns:
+          - name: portfolio_id
+            description: "Unique portfolio identifier"
+            tests:
+              - unique
+              - not_null
+          - name: portfolio_name
+            description: "Display name of the portfolio"
+          - name: portfolio_type
+            description: "Type of portfolio (Mutual Fund, Hedge Fund, Pension Fund, etc.)"
+          - name: strategy
+            description: "Investment strategy"
+          - name: base_currency
+            description: "Base currency for portfolio reporting"
+            tests:
+              - not_null
+          - name: inception_date
+            description: "Date portfolio was established"
+          - name: portfolio_manager
+            description: "Name of portfolio manager"
+          - name: status
+            description: "Portfolio status (Active, Closed, etc.)"
+          - name: benchmark_index
+            description: "Benchmark index for performance comparison"
+          - name: risk_profile
+            description: "Risk profile (Conservative, Moderate, Aggressive)"
+        
+        freshness:
+          warn_after: {count: 7, period: day}
+      
+      - name: transactions
+        description: "All portfolio transactions including buys, sells, and other trade activity"
+        columns:
+          - name: transaction_id
+            description: "Unique transaction identifier"
+            tests:
+              - unique
+              - not_null
+          - name: portfolio_id
+            description: "Reference to portfolio"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw_data', 'portfolios')
+                  field: portfolio_id
+          - name: security_id
+            description: "Reference to security"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw_data', 'securities_master')
+                  field: security_id
+          - name: transaction_date
+            description: "Date transaction was executed"
+          - name: settlement_date
+            description: "Date transaction settled (typically T+2 for equities)"
+          - name: transaction_type
+            description: "Type of transaction (BUY or SELL)"
+            tests:
+              - accepted_values:
+                  values: ['BUY', 'SELL']
+          - name: quantity
+            description: "Number of units transacted"
+            tests:
+              - not_null
+          - name: price
+            description: "Price per unit"
+          - name: transaction_amount
+            description: "Total transaction value (quantity × price)"
+          - name: currency
+            description: "Transaction currency"
+          - name: broker
+            description: "Executing broker"
+          - name: trader_id
+            description: "Trader who executed the transaction"
+          - name: status
+            description: "Transaction status"
+            tests:
+              - accepted_values:
+                  values: ['PENDING', 'SETTLED', 'CANCELLED', 'FAILED']
+          - name: created_at
+            description: "Timestamp when transaction was created"
+          - name: updated_at
+            description: "Timestamp when transaction was last updated"
+        
+        freshness:
+          warn_after: {count: 1, period: hour}
+          error_after: {count: 24, period: hour}
+        
+        loaded_at_field: created_at
+      
+      - name: market_prices
+        description: "Daily market prices for securities from market data vendors"
+        columns:
+          - name: price_id
+            description: "Unique price record identifier"
+            tests:
+              - unique
+              - not_null
+          - name: security_id
+            description: "Reference to security"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw_data', 'securities_master')
+                  field: security_id
+          - name: price_date
+            description: "Date of price observation"
+            tests:
+              - not_null
+          - name: open_price
+            description: "Opening price for the day"
+          - name: high_price
+            description: "Highest price during the day"
+          - name: low_price
+            description: "Lowest price during the day"
+          - name: close_price
+            description: "Closing price for the day"
+            tests:
+              - not_null
+          - name: volume
+            description: "Trading volume (0 for OTC securities like bonds)"
+          - name: currency
+            description: "Price currency"
+          - name: source
+            description: "Price data source (Bloomberg, Reuters, etc.)"
+          - name: created_at
+            description: "Timestamp when price was loaded"
+        
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
+        
+        loaded_at_field: created_at
+      
+      - name: fx_rates
+        description: "Foreign exchange rates for currency conversion"
+        columns:
+          - name: rate_id
+            description: "Unique rate identifier"
+            tests:
+              - unique
+              - not_null
+          - name: from_currency
+            description: "Source currency code"
+          - name: to_currency
+            description: "Target currency code"
+          - name: rate_date
+            description: "Date of exchange rate"
+          - name: exchange_rate
+            description: "Conversion rate from source to target currency"
+            tests:
+              - not_null
+          - name: source
+            description: "FX rate source (Reuters, Bloomberg, etc.)"
+        
+        freshness:
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}

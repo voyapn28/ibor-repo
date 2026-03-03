@@ -1,0 +1,16 @@
+security_id,isin,cusip,ticker,security_name,asset_class,currency,country,sector,market_cap_category,exchange
+SEC001,US0378331005,037833100,AAPL,Apple Inc,Equity,USD,USA,Technology,Large Cap,NASDAQ
+SEC002,US5949181045,594918104,MSFT,Microsoft Corporation,Equity,USD,USA,Technology,Large Cap,NASDAQ
+SEC003,US02079K3059,02079K305,GOOGL,Alphabet Inc Class A,Equity,USD,USA,Technology,Large Cap,NASDAQ
+SEC004,US0231351067,023135106,AMZN,Amazon.com Inc,Equity,USD,USA,Consumer Discretionary,Large Cap,NASDAQ
+SEC005,US88160R1014,88160R101,TSLA,Tesla Inc,Equity,USD,USA,Consumer Discretionary,Large Cap,NASDAQ
+SEC006,US30303M1027,30303M102,META,Meta Platforms Inc,Equity,USD,USA,Technology,Large Cap,NASDAQ
+SEC007,US4781601046,478160104,JNJ,Johnson & Johnson,Equity,USD,USA,Healthcare,Large Cap,NYSE
+SEC008,US46625H1005,46625H100,JPM,JPMorgan Chase & Co,Equity,USD,USA,Financials,Large Cap,NYSE
+SEC009,US91324P1021,91324P102,UNH,UnitedHealth Group Inc,Equity,USD,USA,Healthcare,Large Cap,NYSE
+SEC010,US1912161007,191216100,XOM,Exxon Mobil Corporation,Equity,USD,USA,Energy,Large Cap,NYSE
+SEC011,US912828Z229,912828Z22,UST10Y,US Treasury 10Y Bond,Fixed Income,USD,USA,Government,Investment Grade,OTC
+SEC012,US912828Z310,912828Z31,UST5Y,US Treasury 5Y Bond,Fixed Income,USD,USA,Government,Investment Grade,OTC
+SEC013,US037833AK68,037833AK6,AAPL_BOND,Apple Inc 2.5% 2025,Fixed Income,USD,USA,Technology,Investment Grade,OTC
+SEC014,GB00B24CGK77,B24CGK77,HSBA.L,HSBC Holdings PLC,Equity,GBP,GBR,Financials,Large Cap,LSE
+SEC015,DE0005140008,514000800,DBK.DE,Deutsche Bank AG,Equity,EUR,DEU,Financials,Large Cap,XETRA

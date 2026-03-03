@@ -1,0 +1,8 @@
+rate_id,from_currency,to_currency,rate_date,exchange_rate,source
+FX001,USD,USD,2024-03-20,1.0000,Reuters
+FX002,GBP,USD,2024-03-20,1.2650,Reuters
+FX003,EUR,USD,2024-03-20,1.0850,Reuters
+FX004,USD,GBP,2024-03-20,0.7905,Reuters
+FX005,USD,EUR,2024-03-20,0.9217,Reuters
+FX006,GBP,USD,2024-03-12,1.2580,Reuters
+FX007,EUR,USD,2024-03-19,1.0820,Reuters

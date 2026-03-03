@@ -1,0 +1,4 @@
+portfolio_id,portfolio_name,portfolio_type,strategy,base_currency,inception_date,portfolio_manager,status,benchmark_index,risk_profile
+PF001,US Equity Growth Fund,Mutual Fund,Growth,USD,2020-01-01,PM_Sarah_Johnson,Active,S&P 500,Aggressive
+PF002,Global Technology Fund,Hedge Fund,Technology Focused,USD,2019-06-15,PM_Michael_Chen,Active,NASDAQ 100,Aggressive
+PF003,Conservative Income Fund,Pension Fund,Income,USD,2018-03-01,PM_Robert_Williams,Active,Bloomberg Agg Bond,Conservative
